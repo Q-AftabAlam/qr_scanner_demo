@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner_demo/screens/result_Page.dart';
+import 'package:flutter_qr_scan/flutter_qr_scan.dart';
 
 class MobileQRScannerPage extends StatefulWidget {
   const MobileQRScannerPage({Key? key}) : super(key: key);
@@ -13,12 +14,13 @@ class MobileQRScannerPage extends StatefulWidget {
 class _MobileQRScannerPageState extends State<MobileQRScannerPage> {
   bool isScanComplete = false;
   MobileScannerController controller = MobileScannerController();
+  late QrReaderViewController _controller;
 
-  // void closeScanner(){
-  //   setState(() {
-  //     isScanComplete = false;
-  //   });
-  // }
+  void closeScanner(){
+    setState(() {
+      isScanComplete = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +58,13 @@ class _MobileQRScannerPageState extends State<MobileQRScannerPage> {
                     ),
                   ),
                 );
+                closeScanner();
               }
             }
-          }),
+          }
+
+          ),
+
     );
   }
 }

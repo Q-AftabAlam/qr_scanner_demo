@@ -14,6 +14,12 @@ class _BarCodeScannerState extends State<BarCodeScanner> {
   // String barcode = 'Tap  to scan';
   bool isScanComplete = false;
 
+  void closeScanner(){
+    setState(() {
+      isScanComplete = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +27,7 @@ class _BarCodeScannerState extends State<BarCodeScanner> {
         title: Text("AI BarCode Scanner"),
       ),
       body: AiBarcodeScanner(
+        errorText: "Invalid Code",
         controller: MobileScannerController(
           detectionSpeed: DetectionSpeed.normal,
           detectionTimeoutMs: 50,
@@ -51,8 +58,10 @@ class _BarCodeScannerState extends State<BarCodeScanner> {
                       builder: (context) => Result_Page(
                             qrResult: qrResult,
                           )
-                  )
+                  ),
               );
+              closeScanner();
+
             }
           }
         },
