@@ -91,59 +91,81 @@ class _Generate_QR_CodeState extends State<Generate_QR_Code> {
                 foregroundColor: Colors.black,
               ),
             ),
+            textControllerOne.text.isEmpty ?
+            Text(''):
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child:
+                    ElevatedButton(
+                        child: SizedBox(
+                          width: 115,
+                          height: 50,
+                          child: ListTile(
+                            title: Text('Save'),
+                            trailing: Icon(Icons.download),
+                          ),
+                        ),
+                        onPressed: () {
+                          save();
+                          _permissionGranted();
+                        }
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: ElevatedButton(
+                      child: SizedBox(
+                        width: 115,
+                        height: 50,
+                        child: ListTile(
+                          title: Text('Share'),
+                          trailing: Icon(Icons.share),
+                        ),
+                      ),
+                      onPressed: () async {
+                        await _permissionGranted();
+                        try {
+                          RenderRepaintBoundary boundary = key.currentContext
+                              ?.findRenderObject()! as RenderRepaintBoundary;
+                          //captures qr image
+                          final image = await boundary.toImage(pixelRatio: 1);
 
-            Padding(
-              padding: const EdgeInsets.only(top: 80),
-              child: ElevatedButton(
-                child: Text('Share'),
-                onPressed: () async {
-                  await _permissionGranted();
-                  try {
-                    RenderRepaintBoundary boundary = key.currentContext
-                        ?.findRenderObject()! as RenderRepaintBoundary;
-                  //captures qr image
-                    final image = await boundary.toImage(pixelRatio: 1);
+                          ByteData? byteData =
+                          await image.toByteData(format: ImageByteFormat.png);
 
-                    ByteData? byteData =
-                        await image.toByteData(format: ImageByteFormat.png);
-
-                    Uint8List pngBytes = byteData!.buffer.asUint8List();
-                    print("this is test print $pngBytes");
-                   //app directory for storing images.
-                    final appDir = await getApplicationDocumentsDirectory();
-                  //current time
-                    var datetime = DateTime.now();
-                  //qr image file creation
-                    final file =
-                        await File('${appDir.path}/$datetime.png').create();
-                    //appending data
-                    await file.writeAsBytes(pngBytes);
+                          Uint8List pngBytes = byteData!.buffer.asUint8List();
+                          print("this is test print $pngBytes");
+                          //app directory for storing images.
+                          final appDir = await getApplicationDocumentsDirectory();
+                          //current time
+                          var datetime = DateTime.now();
+                          //qr image file creation
+                          final file =
+                          await File('${appDir.path}/$datetime.png').create();
+                          //appending data
+                          await file.writeAsBytes(pngBytes);
 
 
-                  //Shares QR image
-                    await Share.shareFiles(
-                      [file.path],
-                      mimeTypes: ["image/png"],
-                      text: "Share the QR Code",
-                    );
-                  } catch (e) {
-                    print(e.toString());
-                  }
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: ElevatedButton(
-                child: Text('Download'),
-                onPressed: () {
-                  save();
-                  _permissionGranted();
-                }
-              ),
-            ),
+                          //Shares QR image
+                          await Share.shareFiles(
+                            [file.path],
+                            mimeTypes: ["image/png"],
+                            text: "Share the QR Code",
+                          );
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              )
           ],
-        )),
+        )
+        ),
       )),
     );
   }
@@ -166,11 +188,6 @@ class _Generate_QR_CodeState extends State<Generate_QR_Code> {
           .showSnackBar(SnackBar(content: Text(file.path)));
       print("file path is...${file.path}");
 
-      // await Share.shareFiles(
-      //                 [file.path],
-      //                 mimeTypes: ["image/png"],
-      //                 text: "Share the QR Code",
-      //               );
     } catch (e) {
       print(e.toString());
     }

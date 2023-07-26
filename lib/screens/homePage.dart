@@ -53,8 +53,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
             MyElevatedBTN(
                 onPress: () {
-                  ScanFromGallry().
-                      pickImage(context);
+// Internal Function only for Scann_From_Gallery====================
+                  pickImage();
+
+// external file and with only  Class and function===================================================
+                  // ScanFromGallry().
+                  //     pickImage(context );
+
+// External file and with  Material UI Statefull Class and function===================================
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
@@ -81,32 +87,32 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+// Internal Function only for Scann_From_Gallery====================
+  String? qrResult;
+  Future<void> pickImage() async {
+    await Permission.storage.request();
+    var status = await Permission.storage.status;
 
-  // String? qrResult;
-  // Future<void> pickImage() async {
-  //   await Permission.storage.request();
-  //   var status = await Permission.storage.status;
-  //
-  //   if (status.isGranted) {
-  //     final  pickedFile =
-  //     await ImagePicker().getImage(source: ImageSource.gallery);
-  //     // pickImage(source: ImageSource.gallery);
-  //     if (pickedFile != null) {
-  //
-  //       qrResult = await Scan.parse(pickedFile.path);
-  //       if (qrResult != null) {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => Result_Page(
-  //               qrResult: qrResult!,
-  //               // closeQRScreen: closeScanner,
-  //             ),
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
+    if (status.isGranted) {
+      final  pickedFile =
+      await ImagePicker().getImage(source: ImageSource.gallery);
+      // pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
 
+        qrResult = await Scan.parse(pickedFile.path);
+        if (qrResult != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Result_Page(
+                qrResult: qrResult!,
+                // closeQRScreen: closeScanner,
+              ),
+            ),
+          );
+        }
+      }
+    }
+  }
+//===================================================================
 }

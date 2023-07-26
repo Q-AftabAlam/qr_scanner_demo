@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:qr_scanner_demo/screens/result_Page.dart';
-import 'package:scan/scan.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:flutter/material.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:qr_scanner_demo/screens/result_Page.dart';
+// import 'package:scan/scan.dart';
+// import 'package:image_picker/image_picker.dart';
+
+
+
+// External file and with  Material UI Statefull Class and function===================================
 
 // class ScanFromGallry extends StatefulWidget {
 //   const ScanFromGallry({Key? key}) : super(key: key);
@@ -62,31 +66,35 @@ import 'package:image_picker/image_picker.dart';
 //   }
 // }
 
-class ScanFromGallry {
-  String? qrResult;
 
-  Future<void> pickImage(BuildContext context) async {
-    await Permission.storage.request();
-    var status = await Permission.storage.status;
+// external file and with only  Class and function===================================
 
-    if (status.isGranted) {
-      final pickedFile =
-          await ImagePicker().getImage(source: ImageSource.gallery);
-// pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        qrResult = await Scan.parse(pickedFile.path);
-        if (qrResult != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Result_Page(
-                qrResult: qrResult!,
-// closeQRScreen: closeScanner,
-              ),
-            ),
-          );
-        }
-      }
-    }
-  }
-}
+
+// class ScanFromGallry {
+//   String? qrResult;
+//
+//   Future<void> pickImage(BuildContext context) async {
+//     await Permission.storage.request();
+//     var status = await Permission.storage.status;
+//
+//     if (status.isGranted) {
+//       final pickedFile =
+//           await ImagePicker().getImage(source: ImageSource.gallery);
+// // pickImage(source: ImageSource.gallery);
+//       if (pickedFile != null) {
+//         qrResult = await Scan.parse(pickedFile.path);
+//         if (qrResult != null) {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => Result_Page(
+//                 qrResult: qrResult!,
+// // closeQRScreen: closeScanner,
+//               ),
+//             ),
+//           );
+//         }
+//       }
+//     }
+//   }
+// }

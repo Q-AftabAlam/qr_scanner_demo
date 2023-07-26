@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_scanner_demo/screens/homePage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,16 +39,19 @@ class _Result_PageState extends State<Result_Page> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
             Center(child: Text("Output of QR code.... ",
-            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),),
+            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),
+            ),
+            ),
            SizedBox(height: 25),
+
            InkWell(
-           borderRadius: BorderRadius.circular(50),
+           borderRadius: BorderRadius.circular(10),
                highlightColor: Colors.white54,
                child: Center(
                  child: Text(
                    "${widget.qrResult}",
                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,
-                         color: widget.qrResult.startsWith('http') ?Colors.blue.shade800: Colors.black,
+                         color: widget.qrResult.contains('http') ?Colors.blue.shade800: Colors.black,
                      )
                  ),
                ),
@@ -57,11 +61,34 @@ class _Result_PageState extends State<Result_Page> {
                  final Uri _url = Uri.parse(codeLink);
                  print('codeLink is ${codeLink}');
                  print(_url);
-                 if (!await launchUrl(_url)) {
-                   throw Exception('Could not launch $_url');
-                 }
+
+                   if (!await launchUrl(_url)) {
+                     throw Exception('Could not launch $_url');
+                   }
                }
            ),
+          Padding(
+            padding: const EdgeInsets.only(top:50),
+            child: ElevatedButton(
+                onPressed: (){
+                var _copy =   Clipboard.setData(ClipboardData(text: widget.qrResult));
+                  if(_copy !=null){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Copied Done!")));
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Copied Not Done, Something wrong!")));
+                  }
+                },
+                child:  SizedBox(
+                  width: 130,
+                  height: 50,
+                  child: ListTile(
+                    title: Text('Copy Text'),
+                    trailing: Icon(Icons.copy),
+                  ),
+                ),
+            ),
+          ),
         ],
       ),
     );
